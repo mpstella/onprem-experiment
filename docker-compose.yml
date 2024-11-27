@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - jupyter_network  # Wire PostgreSQL to the same network as JupyterLab
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio_password
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000" # MinIO API
+      - "9001:9001" # MinIO Console
+    volumes:
+      - minio_data:/data
+    networks:
+      - jupyter_network  # Wire MinIO to the same network as JupyterLab
+
+  jupyterlab:
+    build:
+      context: .
+      dockerfile: Dockerfile.jupyterlab  # Reference to your Dockerfile for JupyterLab
+    container_name: jupyterlab      
+    ports:
+      - "8888:8888"  # Port forwarding for JupyterLab
+    volumes:
+      - ./notebooks:/home/jovyan/work  # Mount your notebooks directory
+    environment:
+      - JUPYTER_ENABLE_LAB=yes  # Ensure it starts in JupyterLab mode
+      - JUPYTER_TOKEN=  # Empty token to disable authentication
+      - JUPYTER_PASSWORD=  # Disable password      
+    networks:
+      - jupyter_network  # Wire JupyterLab to the network
+    depends_on:
+      - postgres  # Ensure PostgreSQL starts before JupyterLab
+      - minio  # Ensure MinIO starts before JupyterLab
+    command: start-notebook.sh --NotebookApp.token='' --NotebookApp.password=''      
+
+volumes:
+  postgres-data:
+  minio_data:
+
+networks:
+  jupyter_network:
+    driver: bridge  # Use bridge networking for the services to communicate

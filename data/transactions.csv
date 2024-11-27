@@ -1,0 +1,11 @@
+TransactionID,AccountNumber,Date,TransactionType,Amount,Currency,Description
+1,1234567890,2024-11-27,Deposit,1500.00,USD,Salary Deposit
+2,1234567890,2024-11-26,Withdrawal,-200.00,USD,ATM Withdrawal
+3,1234567890,2024-11-25,Purchase,-50.45,USD,Amazon Purchase
+4,1234567890,2024-11-24,Deposit,1000.00,USD,Freelance Payment
+5,1234567890,2024-11-23,Transfer,-300.00,USD,Rent Payment
+6,1234567890,2024-11-22,Fee,-15.00,USD,Monthly Account Fee
+7,9876543210,2024-11-27,Deposit,200.00,USD,Gift Deposit
+8,9876543210,2024-11-26,Purchase,-30.00,USD,Gas Station
+9,9876543210,2024-11-25,Withdrawal,-100.00,USD,Cash Withdrawal
+10,9876543210,2024-11-24,Deposit,500.00,USD,Refund
